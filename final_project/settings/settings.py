@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
-
+    'user',
 
 ]
 
@@ -175,13 +175,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+AUTH_USER_MODEL = "user.User"
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = "example.com"
 # EMAIL_HOST_USER = "example@.example.com"
 # EMAIL_HOST_PASSWORD = "password"
 # EMAIL_PORT = 1234
-
-SWAGGER_SETTINGS = {
-    "DEFAULT_AUTO_SCHEMA_CLASS": "config.inspectors.CustomSwaggerAutoSchema"
-}
+#
+# SWAGGER_SETTINGS = {
+#     "DEFAULT_AUTO_SCHEMA_CLASS": "config.inspectors.CustomSwaggerAutoSchema"
+# }
