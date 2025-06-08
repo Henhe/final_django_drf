@@ -1,65 +1,17 @@
-import rest_framework.permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, mixins
+from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from author.models import Country, Author
 from author.serializers import CountrySerializer, AuthorSerializer
-# from ..settings.permissions import IsCreatorOfObject
-from author.permissions import CountryPermission, AuthorPermission
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.views import APIView
 
-# class AuthorViewSet(ModelViewSet):
-#     queryset = Author.objects.all()
-#     serializer_class = AuthorSerializer
-#     search_fields = ("name", "country__name")
-#     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
-#     ordering = ("-id", )
-#     ordering_fields = ("country__name", "name", "birth_year")
-#     permission_classes = [AuthorPermission]
-#
-#     def create(self, request, *args, **kwargs):
-#         pass
-#         # data = request.data
-#         # data['creator'] = request.user.id
-#         # serializer = self.get_serializer(data=data)
-#         # serializer.is_valid(raise_exception=True)
-#         # self.perform_create(serializer)
-#         # print_some.delay(f'create {serializer.data} for budget')
-#         # headers = self.get_success_headers(serializer.data)
-#         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-#
-#     def update(self, request, pk=None, *args, **kwargs):
-#         pass
-#         # data = request.data
-#         # data['creator'] = request.user.id
-#         # serializer = self.get_serializer(data=data)
-#         # serializer.is_valid(raise_exception=True)
-#         # self.update(serializer)
-#         # print_some.delay(f'patch {serializer.data} for budget')
-#         # headers = self.get_success_headers(serializer.data)
-#         # return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
-#
-#     def get_permissions(self):
-#
-#         if self.action == 'list':
-#             permission_classes = [IsAuthenticatedOrReadOnly]
-#         # elif (self.action == 'update'
-#         #       or self.action == 'partial_update'
-#         #       or self.action == 'destroy'):
-#         #     permission_classes = [IsCreatorOfObject]
-#         else:
-#             permission_classes = [IsAuthenticated]
-#
-#         return [permission() for permission in permission_classes]
 
 class AuthorViewSet(APIView):
-    #     search_fields = ("name", "country__name")
-    #     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
-    #     ordering = ("-id", )
-    #     ordering_fields = ("country__name", "name", "birth_year")
+    search_fields = ("name", "country__name")
+    filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
+    ordering = ("-id", )
+    ordering_fields = ("country__name", "name", "birth_year")
     #     permission_classes = [AuthorPermission]
     def get(self, request):
         author = Author.objects.all()
