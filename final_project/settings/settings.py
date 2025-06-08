@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'user',
+    'author',
 
 ]
 
@@ -53,7 +54,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     # 'DEFAULT_RENDERER_CLASSES': [
     #     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',

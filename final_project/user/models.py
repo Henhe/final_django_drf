@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from settings.models import Timestamp
 from settings.enums import CustomEnum
-
+from django.contrib.auth.models import PermissionsMixin
 
 class UserRole(CustomEnum):
     ADMIN = 1
@@ -38,23 +38,21 @@ class UserManager(BaseUserManager):
     def create_superuser(
             self,
             username,
-            password=None,
-            email='test@test.test',
+            password=None
     ):
         user = self.create_user(
-            email=email,
+            email=f'{username}@test.test',
             is_active=True,
             role=UserRole.ADMIN.value,
             username=username,
             password=password,
         )
-        # user.role = UserRole.ADMIN.value
-
+        user.is_superuser=True
         user.save(using=self._db)
         return user
 
 
-class User(AbstractBaseUser, Timestamp, models.Model):
+class User(AbstractBaseUser, PermissionsMixin, Timestamp, models.Model):
     email = models.EmailField(unique=True)
     username = models.CharField(unique=True, max_length=100)
     first_name = models.CharField(max_length=50, blank=True)

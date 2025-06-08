@@ -62,53 +62,53 @@ class RegisterView(APIView):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
-class UserActivationView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        uuid = request.GET.get("uuid")
-        token = request.GET.get("token")
-
-        srv = UserService(request)
-
-        user = srv.activate_user(uuid, token)
-
-        return Response({"detail": "User successfully activated"}, status=status.HTTP_200_OK)
-
-
-class ResetPasswordView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        srv = UserService(request)
-
-        srv.reset_password(request.data)
-
-        return Response(
-            {"detail": "Email with password reset link sent to your email"},
-            status=status.HTTP_200_OK
-        )
+# class UserActivationView(APIView):
+#     permission_classes = [AllowAny]
+#
+#     def post(self, request):
+#         uuid = request.GET.get("uuid")
+#         token = request.GET.get("token")
+#
+#         srv = UserService(request)
+#
+#         user = srv.activate_user(uuid, token)
+#
+#         return Response({"detail": "User successfully activated"}, status=status.HTTP_200_OK)
 
 
-class ConfirmPasswordReset(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        uuid = request.GET.get("uuid")
-        token = request.GET.get("token")
-
-        srv = UserService(request)
-
-        srv.confirm_password_reset(uuid, token, request.data)
-
-        return Response({"detail": "Password successfully reset"}, status=status.HTTP_200_OK)
-
-
-class EditPasswordView(APIView):
-
-    def put(self, request):
-        srv = UserService(request)
-
-        srv.edit_password(request.data)
-
-        return Response({"detail": "Password successfully updated"}, status.HTTP_200_OK)
+# class ResetPasswordView(APIView):
+#     permission_classes = [AllowAny]
+#
+#     def post(self, request):
+#         srv = UserService(request)
+#
+#         srv.reset_password(request.data)
+#
+#         return Response(
+#             {"detail": "Email with password reset link sent to your email"},
+#             status=status.HTTP_200_OK
+#         )
+#
+#
+# class ConfirmPasswordReset(APIView):
+#     permission_classes = [AllowAny]
+#
+#     def post(self, request):
+#         uuid = request.GET.get("uuid")
+#         token = request.GET.get("token")
+#
+#         srv = UserService(request)
+#
+#         srv.confirm_password_reset(uuid, token, request.data)
+#
+#         return Response({"detail": "Password successfully reset"}, status=status.HTTP_200_OK)
+#
+#
+# class EditPasswordView(APIView):
+#
+#     def put(self, request):
+#         srv = UserService(request)
+#
+#         srv.edit_password(request.data)
+#
+#         return Response({"detail": "Password successfully updated"}, status.HTTP_200_OK)
