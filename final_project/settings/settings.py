@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'user',
     'author',
     'genre',
-
+    'book',
 ]
 
 REST_FRAMEWORK = {
@@ -58,6 +58,7 @@ REST_FRAMEWORK = {
         # "rest_framework.permissions.IsAuthenticated",
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
     # 'DEFAULT_RENDERER_CLASSES': [
     #     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
     #     'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',

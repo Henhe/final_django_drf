@@ -6,10 +6,7 @@ class CountrySerializer(ModelSerializer):
     class Meta:
         model = Country
         fields = '__all__'
-        # extra_kwargs = {
-        #     'id': {'read_only': False},
-        #     'slug': {'validators': []},
-        # }
+
 
 class AuthorSerializer(ModelSerializer):
     class Meta:

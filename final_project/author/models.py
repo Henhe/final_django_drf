@@ -2,6 +2,7 @@ from django.db import models
 from settings.models import Timestamp
 from user.models import User
 
+
 class Country(Timestamp, models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(unique=True, max_length=100)

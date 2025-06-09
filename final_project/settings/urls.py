@@ -36,6 +36,7 @@ apipatterns = [
     path("author/", include("author.urls_author")),
     path("country/", include("author.urls_country")),
     path("genre/", include("genre.urls")),
+    path("book/", include("book.urls")),
 ]
 
 urlpatterns = [

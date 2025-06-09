@@ -12,10 +12,22 @@ class GenreViewSet(APIView):
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     ordering = ("-id", )
     ordering_fields = ("name")
-    def get(self, request):
-        genre = Genre.objects.all()
-        serializer = GenreSerializer(genre, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    filterset_fields = ["name"]
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+
+    def get_queryset(self):
+        qp = self.request.query_params
+        filter_value = qp.get('name', None)
+
+        if filter_value is not None:
+            self.queryset.filter(name__icontains=filter_value)
+
+        return self.queryset
+    # def get(self, request):
+    #     genre = Genre.objects.all()
+    #     serializer = GenreSerializer(genre, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         data = request.data

@@ -1,22 +1,37 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
+
 from author.models import Country, Author
 from author.serializers import CountrySerializer, AuthorSerializer
 from rest_framework.views import APIView
 
 
-class AuthorViewSet(APIView):
-    search_fields = ("name", "country__name")
+class AuthorViewSet(generics.ListAPIView, generics.CreateAPIView):
+    search_fields = ("name", "country__name", "birth_year")
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     ordering = ("-id", )
     ordering_fields = ("country__name", "name", "birth_year")
-    #     permission_classes = [AuthorPermission]
-    def get(self, request):
-        author = Author.objects.all()
-        serializer = AuthorSerializer(author, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    filterset_fields = ["country__name", "name", "birth_year"]
+    queryset = Author.objects.all()
+    serializer_class = CountrySerializer
+
+    def get_queryset(self):
+        qp = self.request.query_params
+        filter_value = qp.get('country__name', None)
+        if filter_value is not None:
+            self.queryset.filter(country__name__icontains=filter_value)
+
+        filter_value = qp.get('name', None)
+        if filter_value is not None:
+            self.queryset.filter(name__icontains=filter_value)
+
+        filter_value = qp.get('birth_year', None)
+        if filter_value is not None:
+            self.queryset.filter(birth_year=filter_value)
+
+        return self.queryset
 
     def post(self, request):
         data = request.data
@@ -73,16 +88,23 @@ class AuthorDetailViewSet(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CountryViewSet(APIView):
+class CountryViewSet(generics.ListAPIView, generics.CreateAPIView):
     search_fields = ("name", )
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     ordering = ("-id", )
     ordering_fields = ("name",)
-    # permission_classes = [CountryPermission]
-    def get(self, request):
-        country = Country.objects.all()
-        serializer = CountrySerializer(country, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    filterset_fields = ["name"]
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+    def get_queryset(self):
+        qp = self.request.query_params
+        filter_value=qp.get('name', None)
+
+        if filter_value is not None:
+            self.queryset.filter(name__icontains=filter_value)
+
+        return self.queryset
 
     def post(self, request):
         data = request.data
