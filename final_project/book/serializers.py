@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from book.models import Book, BookAuthor
+from book.models import Book, BookAuthor, BookImages, RaitingBook
 from author.models import Author
 from author.serializers import AuthorSerializer
 
@@ -9,7 +9,7 @@ class BookSerializer(ModelSerializer):
     authors = serializers.SerializerMethodField()
     class Meta:
         model = Book
-        fields = ('name', 'isbn', 'genre', 'authors')
+        fields = ('id', 'name', 'isbn', 'genre', 'authors')
 
     def get_authors(self, obj):
         queryset = BookAuthor.objects.filter(book=obj).values_list('author', flat=True)
@@ -33,3 +33,15 @@ class BookAuthorSerializer(ModelSerializer):
     class Meta:
         model = BookAuthor
         fields = ('book', 'author')
+
+
+class UploadBookImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookImages
+        fields =  '__all__'
+
+
+class RaitingBookSerializer(ModelSerializer):
+    class Meta:
+        model = RaitingBook
+        fields = ('raiting', 'creator', 'book')

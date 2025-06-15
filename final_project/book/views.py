@@ -1,11 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.response import Response
 
-from book.models import Book, BookAuthor
+from book.models import Book, BookAuthor, BookImages, RaitingBook
 from book.serializers import (BookSerializer, BookSimpleSerializer,
-                              BookAuthorSerializer)
+                              BookAuthorSerializer, RaitingBookSerializer)
 from rest_framework.views import APIView
 
 
@@ -121,3 +122,49 @@ class BookDetailViewSet(APIView):
         except Book.DoesNotExist:
             return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UploadBookImage(APIView):
+    parser_classes = (MultiPartParser, FormParser, FileUploadParser)
+
+    def put(self, request, id_):
+        file_obj = request.FILES['file']
+
+        try:
+            book = Book.objects.get(id=id_)
+
+        except Book.DoesNotExist:
+            return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        BookImages.objects.filter(book_id=book.id).delete()
+        BookImages.objects.create(
+            book_id=book.id,
+            image=file_obj
+        )
+
+        return Response(status=204)
+
+
+class RaitingBookViewSet(APIView):
+    queryset = RaitingBook.objects.all()
+    serializer_class = RaitingBookSerializer
+
+    def post(self, request, id_):
+        data = request.data
+        data['creator'] = request.user.id
+
+        try:
+            book = Book.objects.get(id=id_)
+
+        except Book.DoesNotExist:
+            return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        data['book'] = book.id
+
+        serializer = RaitingBookSerializer(data=data)
+        if serializer.is_valid():
+            RaitingBook.objects.filter(creator=data['creator']).filter(book=book.id).delete()
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

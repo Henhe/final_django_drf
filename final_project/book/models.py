@@ -1,8 +1,12 @@
+from string import digits
+
 from django.db import models
 from settings.models import Timestamp
 from user.models import User
 from author.models import Author
 from genre.models import Genre
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch.dispatcher import receiver
 
 
 class Book(Timestamp, models.Model):
@@ -19,3 +23,26 @@ class Book(Timestamp, models.Model):
 class BookAuthor(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+
+
+class BookImages(Timestamp):
+    book = models.ForeignKey(Book, verbose_name='Book', related_name='image', on_delete=models.CASCADE)
+    image = models.ImageField('Image', upload_to='images')
+
+
+class RaitingBook(Timestamp):
+    book = models.ForeignKey(Book, verbose_name='Book', related_name='raitingbook', on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="raitingcreator")
+    raiting = models.IntegerField()
+
+    def __str__(self):
+        return f'Book {self.book} creator {self.creator} raiting {self.raiting}'
+
+
+@receiver(pre_delete, sender=BookImages)
+def image_model_delete(sender, instance, **kwargs):
+    if instance.image.name:
+        instance.image.delete(False)
+
+
+
