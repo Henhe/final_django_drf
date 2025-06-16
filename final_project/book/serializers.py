@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from book.models import Book, BookAuthor, BookImages, RaitingBook
+from book.models import Book, BookAuthor, BookImages, RaitingBook, FavoriteBook
 from author.models import Author
 from author.serializers import AuthorSerializer
 
@@ -45,3 +45,9 @@ class RaitingBookSerializer(ModelSerializer):
     class Meta:
         model = RaitingBook
         fields = ('raiting', 'creator', 'book')
+
+
+class FavoriteBookSerializer(ModelSerializer):
+    class Meta:
+        model = FavoriteBook
+        fields = ('id', 'user', 'book')

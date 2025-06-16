@@ -4,9 +4,10 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.response import Response
 
-from book.models import Book, BookAuthor, BookImages, RaitingBook
+from book.models import Book, BookAuthor, BookImages, RaitingBook, FavoriteBook
 from book.serializers import (BookSerializer, BookSimpleSerializer,
-                              BookAuthorSerializer, RaitingBookSerializer)
+                              BookAuthorSerializer, RaitingBookSerializer,
+                              FavoriteBookSerializer)
 from rest_framework.views import APIView
 
 
@@ -149,6 +150,11 @@ class RaitingBookViewSet(APIView):
     queryset = RaitingBook.objects.all()
     serializer_class = RaitingBookSerializer
 
+    def get(self, request):
+        raitings = RaitingBook.objects.all()
+        serializer = RaitingBookSerializer(raitings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request, id_):
         data = request.data
         data['creator'] = request.user.id
@@ -168,3 +174,47 @@ class RaitingBookViewSet(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FavoriteBookDetailViewSet(APIView):
+    def get(self, request):
+        favoritebooks = FavoriteBook.objects.all()
+        serializer = FavoriteBookSerializer(favoritebooks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        data = request.data
+        data['user'] = request.user.id
+        #
+        # try:
+        #     book = Book.objects.get(id=id_)
+        #
+        # except Book.DoesNotExist:
+        #     return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+        #
+        # data['book'] = book.id
+        fb = FavoriteBook.objects.filter(book=data['book']).filter(user=request.user.id).exists()
+
+        serializer = FavoriteBookSerializer(data=data)
+        if serializer.is_valid() and not fb:
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        data = request.data
+        data['user'] = request.user.id
+
+        # try:
+        #     book = Book.objects.get(id=id_)
+        #
+        # except Book.DoesNotExist:
+        #     return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # data['book'] = book.id
+        fb = FavoriteBook.objects.filter(book=data['book']).filter(user=request.user.id)
+        if fb:
+            fb.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
