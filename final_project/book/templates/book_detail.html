@@ -1,0 +1,71 @@
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+ <div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+          {% if book.image.all|length > 0 %}
+            <div class="text-center">
+              <div class="container">
+                <div class="row">
+                  {% for im_ in book.image.all %}
+                    <div class="col">
+                      <img src="{{im_.image.url}}" class="img-fluid rounded-start" >
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h2 class="card-title">{{book.name }}</h2>
+        <p class="card-text">Автор: {{authors}}</p>
+        <p class="card-text">ISBN: {{book.isbn}}</p>
+      </div>
+
+      {% if raitingbook.all|length > 0 %}
+        <div class="card-body">
+          <h4 class="card-title">Рейтинги книги</h4>
+            {% for rating in raitingbook.all %}
+              <p class="card-text">Пользователь: {{rating.creator}} - {{rating.raiting}}</p>
+            {% endfor %}
+          <p class="card-text">Средний рейтинг: {{aver_rating}}</p>
+
+        </div>
+      {% endif %}
+
+      {% if bookreaders.all|length > 0 %}
+        <div class="card-body">
+          <h4 class="card-title">Книгу просматривали</h4>
+            {% for reader in bookreaders.all %}
+              <p class="card-text"> {{reader.date_read}}</p>
+            {% endfor %}
+          </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
