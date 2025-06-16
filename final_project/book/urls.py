@@ -1,5 +1,6 @@
 from book.views import (BookViewSet, BookDetailViewSet, UploadBookImage,
-                        RaitingBookViewSet, FavoriteBookDetailViewSet)
+                        RaitingBookViewSet, FavoriteBookDetailViewSet,
+                        BookInfoViewSet)
 from django.urls import path
 
 
@@ -9,8 +10,8 @@ urlpatterns = ([
         path("cover/<int:id_>/", UploadBookImage.as_view(), name='book-cover'),
         path("raiting/<int:id_>/", RaitingBookViewSet.as_view(), name='book-raiting'),
         path("raiting/", RaitingBookViewSet.as_view(), name='book-raiting-list'),
-        # path("favorite/<int:id_>/", FavoriteBookDetailViewSet.as_view(), name='book-favorite'),
         path("favorite/", FavoriteBookDetailViewSet.as_view(), name='book-favorite'),
+        path("read/<int:pk>/", BookInfoViewSet.as_view(), name='book-read'),
         ]
         )
 

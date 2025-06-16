@@ -47,6 +47,14 @@ class FavoriteBook(Timestamp):
         return f'Book {self.book} user {self.creator} '
 
 
+class BookReaders(Timestamp):
+    book = models.ForeignKey(Book,  verbose_name='Book', related_name='bookreaders', on_delete=models.CASCADE)
+    date_read = models.DateTimeField()
+
+    def __str__(self):
+        return f'Book {self.book} read {self.date_read}'
+
+
 @receiver(pre_delete, sender=BookImages)
 def image_model_delete(sender, instance, **kwargs):
     if instance.image.name:

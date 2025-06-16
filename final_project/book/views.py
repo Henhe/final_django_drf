@@ -4,11 +4,14 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.response import Response
 
-from book.models import Book, BookAuthor, BookImages, RaitingBook, FavoriteBook
+from book.models import Book, BookAuthor, BookImages, RaitingBook, FavoriteBook, BookReaders
 from book.serializers import (BookSerializer, BookSimpleSerializer,
                               BookAuthorSerializer, RaitingBookSerializer,
                               FavoriteBookSerializer)
 from rest_framework.views import APIView
+from django.views.generic import DetailView
+from django.db.models import Avg
+import datetime
 
 
 class BookViewSet(generics.ListAPIView, generics.CreateAPIView):
@@ -185,14 +188,7 @@ class FavoriteBookDetailViewSet(APIView):
     def post(self, request):
         data = request.data
         data['user'] = request.user.id
-        #
-        # try:
-        #     book = Book.objects.get(id=id_)
-        #
-        # except Book.DoesNotExist:
-        #     return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
-        #
-        # data['book'] = book.id
+
         fb = FavoriteBook.objects.filter(book=data['book']).filter(user=request.user.id).exists()
 
         serializer = FavoriteBookSerializer(data=data)
@@ -206,15 +202,35 @@ class FavoriteBookDetailViewSet(APIView):
         data = request.data
         data['user'] = request.user.id
 
-        # try:
-        #     book = Book.objects.get(id=id_)
-        #
-        # except Book.DoesNotExist:
-        #     return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        # data['book'] = book.id
-        fb = FavoriteBook.objects.filter(book=data['book']).filter(user=request.user.id)
+        fb = FavoriteBook.objects.filter(book=data['book']).filter(user=data['user'])
         if fb:
             fb.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookInfoViewSet(DetailView):
+    # redirect_field_name = "redirect_to"
+    model = Book
+    template_name = "book_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        authors = BookAuthor.objects.filter(book=context['book'])
+        auth_str = ', '.join([f'{author.author.name}' for author in authors])
+
+        raitingbook = RaitingBook.objects.filter(book=context['book'])
+        aver_rating = 0
+        if raitingbook.exists():
+            aver_rating = round(raitingbook.aggregate(Avg('raiting'))['raiting__avg'],2)
+
+        bookreaders = BookReaders.objects.filter(book=context['book'])
+
+        context['authors'] = auth_str
+        context['raitingbook'] = raitingbook
+        context['aver_rating'] = aver_rating
+        context['bookreaders'] = bookreaders
+
+        br = BookReaders(book=context['book'], date_read=datetime.datetime.now())
+        br.save()
+        return context
