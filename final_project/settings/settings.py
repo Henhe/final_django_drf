@@ -60,36 +60,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
-    # 'DEFAULT_RENDERER_CLASSES': [
-    #     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-    #     'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
-    #     # Any other renders
-    # ],
-    #
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     # If you use MultiPartFormParser or FormParser, we also have a camel case version
-    #     'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
-    #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-    #     # Any other parsers
-    # ],
-    # "JSON_UNDERSCOREIZE": {
-    #     "no_underscore_before_number": True
-    # },
-    # 'DEFAULT_PAGINATION_CLASS': 'config.paginations.CustomPageNumberPagination',
-    # 'PAGE_SIZE': 1,
-    # "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    # 'TEST_REQUEST_RENDERER_CLASSES': [
-    #     'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-    #     'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
-    #     # Any other renders
-    # ],
-    #
-    # 'TEST_REQUEST_PARSER_CLASSES': [
-    #     # If you use MultiPartFormParser or FormParser, we also have a camel case version
-    #     'djangorestframework_camel_case.parser.CamelCaseMultiPartParser',
-    #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-    #     # Any other parsers
-    # ],
+
 }
 
 
@@ -186,15 +157,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "user.User"
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = "example.com"
-# EMAIL_HOST_USER = "example@.example.com"
-# EMAIL_HOST_PASSWORD = "password"
-# EMAIL_PORT = 1234
-#
-# SWAGGER_SETTINGS = {
-#     "DEFAULT_AUTO_SCHEMA_CLASS": "config.inspectors.CustomSwaggerAutoSchema"
-# }
+
+SWAGGER_SETTINGS = {
+    "DEFAULT_AUTO_SCHEMA_CLASS": "settings.inspectors.CustomSwaggerAutoSchema"
+}
 
 # Default settings
 BOOTSTRAP5 = {

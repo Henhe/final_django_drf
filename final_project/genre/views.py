@@ -1,3 +1,6 @@
+from importlib.metadata import requires
+
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -5,7 +8,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from genre.models import Genre
 from genre.serializers import GenreSerializer
-
+from settings.views import CustomModelViewSet, CustomAPIView
 
 class GenreViewSet(APIView):
     search_fields = ("name")
@@ -15,6 +18,7 @@ class GenreViewSet(APIView):
     filterset_fields = ["name"]
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+
 
     def get_queryset(self):
         qp = self.request.query_params
@@ -40,6 +44,7 @@ class GenreViewSet(APIView):
 
 
 class GenreDetailViewSet(APIView):
+
     def get(self, request, id_):
         try:
             genre = Genre.objects.get(id=id_)

@@ -53,6 +53,7 @@ class CustomAPIView(APIView):
 
         return Response(data=response, status=http_status)
 
+
     # def post_related_operations(self, request) -> dict:
     #     pass
     #

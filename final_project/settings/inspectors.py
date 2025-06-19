@@ -44,7 +44,7 @@ class CustomSwaggerAutoSchema(SwaggerAutoSchema):
         return responses
 
     def get_request_serializer(self):
-        from config.views import CustomAPIView
+        from settings.views import CustomAPIView
         serializer = super().get_request_serializer()
 
         if issubclass(self.view.__class__, CustomAPIView):
@@ -53,7 +53,7 @@ class CustomSwaggerAutoSchema(SwaggerAutoSchema):
         return serializer
 
     def get_default_response_serializer(self):
-        from config.views import CustomAPIView
+        from settings.views import CustomAPIView
         serializer = super().get_default_response_serializer()
 
         if issubclass(self.view.__class__, CustomAPIView):

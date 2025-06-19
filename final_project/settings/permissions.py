@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import BasePermission
 from user.models import User
 from settings.constants import DjangoViewAction
 
