@@ -1,5 +1,5 @@
 [project]
-name = "final-django-drf"
+name = "finaldjangodrf"
 version = "0.1.0"
 description = ""
 authors = [
