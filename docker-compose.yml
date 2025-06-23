@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    postgresql:
+      image: postgres:latest
+      container_name: postgresql
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: drffinal
+      ports:
+        - "54322:5432"
+      volumes:
+        - .:/pgdata
+
+    final_project:
+      build: .
+      image: final_project:latest
+      container_name: final_project
+      restart: always
+      command: "bash -c 'poetry run python manage.py migrate --no-input && poetry run python manage.py runserver 0.0.0.0:8000'"
+      working_dir: /final_project
+      volumes:
+        - .:/final_project
+      ports:
+        - "8000:8000"
+      depends_on:
+        - postgresql
+
+
