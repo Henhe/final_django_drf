@@ -4,13 +4,13 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from genre.models import Genre
 from genre.serializers import GenreSerializer
 from settings.views import CustomModelViewSet, CustomAPIView
 
-class GenreViewSet(APIView):
+class GenreViewSet(generics.ListAPIView, generics.CreateAPIView):
     search_fields = ("name")
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     ordering = ("-id", )
