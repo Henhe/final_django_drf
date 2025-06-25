@@ -51,7 +51,7 @@ class BookViewSet(generics.ListAPIView, generics.CreateAPIView):
         serializer = BookSimpleSerializer(data=request.data)
         if serializer.is_valid():
             book = serializer.save()
-            print(f'{book=}')
+
             if book is not None:
                 datalocal = {}
                 for i in data['authors']:
