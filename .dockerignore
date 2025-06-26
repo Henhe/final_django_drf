@@ -6,6 +6,8 @@ __pycache__
 env
 pip-log.txt
 pip-delete-this-directory.txt
+Dockerfile
+.dockerignore
 .tox
 .coverage
 .coverage.*
@@ -18,5 +20,5 @@ coverage.xml
 .mypy_cache
 .pytest_cache
 .hypothesis
-*/modules/*.py
-*/venv/*
+/modules/*.py
+/.venv/*

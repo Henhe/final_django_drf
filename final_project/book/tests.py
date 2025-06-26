@@ -1,5 +1,5 @@
 from django.test import TestCase
-from book.models import Book, BookAuthor, RaitingBook, FavoriteBook
+from book.models import Book, BookAuthor, RaitingBook, FavoriteBookцыд
 from user.models import User, UserRole
 from author.models import Author, Country
 from genre.models import Genre

@@ -18,7 +18,8 @@ services:
       image: final_project:latest
       container_name: final_project
       restart: always
-      command: "bash -c 'poetry run python manage.py migrate --no-input && poetry run python manage.py runserver 0.0.0.0:8000'"
+#      command: "bash -c 'poetry run python ./final_project/manage.py migrate --no-input && poetry run python ./final_project/manage.py runserver 0.0.0.0:8000'"
+      command: "bash -c 'poetry run python ./final_project/manage.py migrate --no-input && poetry run python ./final_project/manage.py runserver 0.0.0.0:8000'"
       working_dir: /final_project
       volumes:
         - .:/final_project
